@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b1020">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="UniPlan">
+  <meta name="description" content="Dein persönlicher Uni-Planer für Stundenplan, Abgaben, Klausuren und Lernzeiten.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+  <title>UniPlan – Dein Uni-Assistent</title>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand"><div class="brand-mark">U</div><div><div class="brand-name">UniPlan</div><div class="brand-sub">Dein Studium. Dein Überblick.</div></div></div>
+      <button id="quickAdd" class="primary small">＋ Neu</button>
+    </header>
+    <main>
+      <section class="welcome">
+        <div><div class="eyebrow" id="todayLabel">DEIN ÜBERBLICK</div><h1 id="greeting">Machen wir’s übersichtlich.</h1><p>Ein klarer Kopf beginnt mit einem klaren Plan.</p></div>
+        <div class="streak"><span class="streak-icon">✦</span><div><b id="doneToday">0</b><small>heute erledigt</small></div></div>
+      </section>
+      <nav class="tabs" aria-label="Hauptnavigation">
+        <button class="tab active" data-view="dashboard">Übersicht</button>
+        <button class="tab" data-view="schedule">Stundenplan</button>
+        <button class="tab" data-view="tasks">Aufgaben</button>
+        <button class="tab" data-view="exams">Klausuren</button>
+        <button class="tab" data-view="study">Lernplan</button>
+        <button class="tab" data-view="planner">KI-Planer</button>
+        <button class="tab" data-view="settings">Einstellungen</button>
+      </nav>
+      <div id="view" aria-live="polite"></div>
+    </main>
+    <footer><span>UniPlan · lokal auf diesem Gerät</span><span id="saveState">Änderungen werden automatisch gespeichert</span></footer>
+  </div>
+  <dialog id="taskDialog">
+    <form id="taskForm" method="dialog">
+      <div class="dialog-head"><div><div class="eyebrow">NEUER EINTRAG</div><h2 id="dialogTitle">Aufgabe hinzufügen</h2></div><button type="button" class="icon-button" id="closeDialog" aria-label="Schließen">×</button></div>
+      <label>Titel<input name="title" required maxlength="120" placeholder="z. B. Arbeitsblatt bearbeiten"></label>
+      <div class="form-grid"><label>Art<select name="type"><option value="task">Aufgabe / Abgabe</option><option value="exam">Klausur</option><option value="study">Lerneinheit</option><option value="event">Veranstaltung</option></select></label><label>Modul<input name="module" placeholder="z. B. Arithmetik & Algebra"></label></div>
+      <div class="form-grid"><label>Datum<input name="date" type="date"></label><label>Uhrzeit<input name="time" type="time"></label></div>
+      <div class="form-grid"><label>Dauer (Min.)<input name="duration" type="number" min="5" step="5" placeholder="60"></label><label>Priorität<select name="priority"><option value="normal">Normal</option><option value="high">Hoch</option><option value="urgent">Dringend</option></select></label></div>
+      <label>Notizen<textarea name="notes" rows="3" placeholder="Was musst du erledigen?"></textarea></label>
+      <label class="check-label"><input name="reminder" type="checkbox" checked> In der App an den Termin erinnern (solange sie geöffnet ist)</label>
+      <div class="dialog-actions"><button type="button" class="secondary" id="cancelDialog">Abbrechen</button><button type="submit" class="primary">Speichern</button></div>
+    </form>
+  </dialog>
+  <dialog id="eventDialog">
+    <form id="eventForm" method="dialog">
+      <div class="dialog-head"><div><div class="eyebrow">STUNDENPLAN</div><h2>Veranstaltung hinzufügen</h2></div><button type="button" class="icon-button" id="closeEventDialog">×</button></div>
+      <label>Veranstaltung<input name="title" required placeholder="z. B. Sachunterricht Didaktik"></label>
+      <div class="form-grid"><label>Wochentag<select name="day"><option value="1">Montag</option><option value="2">Dienstag</option><option value="3">Mittwoch</option><option value="4">Donnerstag</option><option value="5">Freitag</option><option value="6">Samstag</option><option value="0">Sonntag</option></select></label><label>Modul<input name="module" placeholder="Modulname"></label></div>
+      <div class="form-grid"><label>Beginn<input name="start" type="time" required value="10:00"></label><label>Ende<input name="end" type="time" required value="12:00"></label></div>
+      <label>Raum / Ort<input name="room" placeholder="z. B. UHG C01-xxx"></label>
+      <label class="check-label"><input name="afterReminder" type="checkbox" checked> Nach der Veranstaltung an neue Aufgaben erinnern</label>
+      <div class="dialog-actions"><button type="button" class="secondary" id="cancelEventDialog">Abbrechen</button><button type="submit" class="primary">Speichern</button></div>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
