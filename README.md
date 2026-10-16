@@ -45,3 +45,9 @@ Rufe dann auf dem Entwicklungsgerät `http://localhost:8000` auf. Für das iPhon
 ## Intelligenter Lernplaner (lokaler Prototyp)
 Der Tab „KI-Planer“ erstellt Vorschläge aus den direkt in UniPlan gespeicherten Veranstaltungen, offenen Aufgaben und Klausuren. Berücksichtigt werden Deadlines, Prioritäten, ein einstellbares tägliches Lernlimit, Sitzungsdauer, Pausenpuffer und ein Planungshorizont. Vorschläge werden nicht automatisch als Aufgaben angelegt: Erst mit „Übernehmen“ entsteht eine Lerneinheit im Lernplan. Abgelehnte Vorschläge werden nicht übernommen.
 Die Planung ist aktuell regelbasiert und transparent, kein echtes generatives KI-Modell. Es wird kein API-Schlüssel benötigt und keine Aufgabe an einen externen KI-Anbieter gesendet. Ein echtes Sprachmodell muss über einen eigenen sicheren Server eingebunden werden; ein API-Schlüssel darf nie in `app.js` oder einer anderen öffentlich ausgelieferten Datei stehen.
+
+
+## eKVV-Kalenderimport
+Im Tab „Einstellungen“ kannst du deinen persönlichen iCalendar-Link aus dem eKVV versuchen direkt zu importieren oder eine `.ics`-Datei auswählen. Wöchentliche `RRULE:FREQ=WEEKLY`-Termine werden als wiederkehrende Veranstaltungen importiert; zukünftige Einzeltermine werden als Termine gespeichert. Beim erneuten Import werden nur vorher importierte eKVV-Einträge ersetzt. Der Kalenderlink wird nicht gespeichert.
+
+**Grenzen:** Browser können den direkten Abruf eines Kalenderlinks durch CORS-Regeln blockieren. In dem Fall die Kalenderdatei als `.ics` herunterladen und in UniPlan auswählen. Die Umsetzung verarbeitet wöchentliche Wiederholungen; komplexe Wiederholungsregeln, Ausnahmen/verschobene Einzeltermine und Serientermine mit mehreren verschiedenen Wiederholungsmustern werden nicht vollständig abgebildet. Es gibt keine automatische Synchronisierung; importiere erneut, wenn sich dein Stundenplan ändert.
