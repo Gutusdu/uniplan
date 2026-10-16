@@ -45,3 +45,26 @@ Rufe dann auf dem Entwicklungsgerät `http://localhost:8000` auf. Für das iPhon
 ## Intelligenter Lernplaner (lokaler Prototyp)
 Der Tab „KI-Planer“ erstellt Vorschläge aus den direkt in UniPlan gespeicherten Veranstaltungen, offenen Aufgaben und Klausuren. Berücksichtigt werden Deadlines, Prioritäten, ein einstellbares tägliches Lernlimit, Sitzungsdauer, Pausenpuffer und ein Planungshorizont. Vorschläge werden nicht automatisch als Aufgaben angelegt: Erst mit „Übernehmen“ entsteht eine Lerneinheit im Lernplan. Abgelehnte Vorschläge werden nicht übernommen.
 Die Planung ist aktuell regelbasiert und transparent, kein echtes generatives KI-Modell. Es wird kein API-Schlüssel benötigt und keine Aufgabe an einen externen KI-Anbieter gesendet. Ein echtes Sprachmodell muss über einen eigenen sicheren Server eingebunden werden; ein API-Schlüssel darf nie in `app.js` oder einer anderen öffentlich ausgelieferten Datei stehen.
+
+
+## eKVV-Kalenderimport
+Im Tab „Einstellungen“ kannst du deinen persönlichen iCalendar-Link aus dem eKVV versuchen direkt zu importieren oder eine `.ics`-Datei auswählen. Wöchentliche `RRULE:FREQ=WEEKLY`-Termine werden als wiederkehrende Veranstaltungen importiert; zukünftige Einzeltermine werden als Termine gespeichert. Beim erneuten Import werden nur vorher importierte eKVV-Einträge ersetzt. Der Kalenderlink wird nicht gespeichert.
+
+**Grenzen:** Browser können den direkten Abruf eines Kalenderlinks durch CORS-Regeln blockieren. In dem Fall die Kalenderdatei als `.ics` herunterladen und in UniPlan auswählen. Die Umsetzung verarbeitet wöchentliche Wiederholungen; komplexe Wiederholungsregeln, Ausnahmen/verschobene Einzeltermine und Serientermine mit mehreren verschiedenen Wiederholungsmustern werden nicht vollständig abgebildet. Es gibt keine automatische Synchronisierung; importiere erneut, wenn sich dein Stundenplan ändert.
+
+
+## Cloud-Synchronisierung zwischen iPhone und iPad
+
+Diese Version enthält optionale Supabase-Cloud-Synchronisierung. Du brauchst ein eigenes kostenloses Supabase-Projekt.
+
+1. Erstelle ein Projekt auf https://supabase.com/.
+2. Öffne den SQL Editor und führe den kompletten Inhalt von `supabase_setup.sql` aus.
+3. Öffne Project Settings → API/Connect und kopiere die Projekt-URL sowie den öffentlichen Publishable Key (bei älteren Projekten „anon public“).
+4. Trage URL und Key in UniPlan → Einstellungen → Cloud-Synchronisierung ein und tippe „Verbindung speichern“.
+5. Erstelle ein Konto mit E-Mail und Passwort. Falls eine Bestätigungsmail kommt, bestätige sie und melde dich danach an.
+6. Wiederhole URL und Key auf dem iPad und melde dich mit demselben Konto an.
+7. Tippe auf beiden Geräten bei Bedarf „Jetzt synchronisieren“, um neue Daten vom jeweils anderen Gerät abzurufen.
+
+**Sicherheit:** Niemals den `service_role`-Key verwenden. Nur den öffentlichen Publishable/anon Key verwenden. Die Tabelle hat Row Level Security, damit angemeldete Konten nur die eigenen Daten lesen und schreiben. Daten werden über HTTPS übertragen und als Cloud-Kopie beim Anbieter gespeichert.
+
+Bei der ersten Verbindung fragt die App, ob bestehende Cloud-Daten geladen oder lokale Daten hochgeladen werden sollen. Änderungen werden nach kurzer Verzögerung hochgeladen. Auf dem anderen Gerät „Jetzt synchronisieren“ antippen. Bei gleichzeitigen Änderungen gibt es keine feldweise Zusammenführung; du wählst die ganze Cloud- oder lokale Version. Exportiere daher gelegentlich ein Backup. Abmelden löscht keine lokalen Daten und auch nicht die Cloud-Kopie.
